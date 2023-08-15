@@ -1,49 +1,71 @@
 import pygame
 import random
 from board import Grid
-from apple import Apple
+from bomb import Bomb
 from snake import Snake
+from collision import Hitbox
 
 
 #----------GLOBAL----------#
 pygame.init()
-screen = pygame.display.set_mode((900, 900))
+screen = pygame.display.set_mode((960, 960))
 clock = pygame.time.Clock()
 running = True
 dt = 0
 cycle = 0
-# Apple initilize
-a1 = Apple(screen)
-APPLE_CENTER = a1.findCenter()
+grid = Grid(screen, "black")
+padding = grid.padding
+
+# Bomb initilize
+b1 = Bomb(screen)
+BOMB_CENTER = b1.findCenter()
+ARROW_DIR = b1.spawnDir(screen, BOMB_CENTER)
+ARROW_COMB_OBJECTS = b1.returnArrowCombObjects(screen, BOMB_CENTER,ARROW_DIR)
+
 # Snake initialize
 s1 = Snake(screen)
-SNAKE_SPAWN_COR = s1.spawnCor()
+SNAKE_COR = s1.spawnCor()
+keyLog = {"w":0, "a":0, "s":0, "d":0}
+
+def collisionTrue(snakeCor, BombCor, padding):
+    pass
+        
 #----------GLOBAL----------#
 
 
 #----------GAME LOOP----------#
+def gameLoop(keyLog):
+    # Board Setup
+    screen.fill("white")
+    grid = Grid(screen, "darkgrey")
+    grid.drawGrid()
+
+    # Bomb Setup
+    bomb = Bomb(screen)
+    bomb.spawnCircle(BOMB_CENTER)
+    bomb.drawArrows(screen, ARROW_COMB_OBJECTS)
+
+    # Snake Setup & Movement
+    snake = Snake(screen)
+    snake.handleKeyLog(keys, keyLog)
+    snake.head(keyLog, SNAKE_COR)
+
+    # Setup Hitbox
+    #hitbox = Hitbox(BOMB_CENTER, screen)
+
+    pygame.display.flip()
+#----------GAME LOOP----------#
+
+
+
 while running:
-    keys = pygame.key.get_pressed()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    
+    keys = pygame.key.get_pressed()
+    gameLoop(keyLog)
 
-    # Board Setup
-    screen.fill("purple")
-    grid = Grid(screen, "lightgrey")
-    grid.drawGrid()
+    dt = clock.tick(11) / 1000
 
-    # Food Setup
-    apple = Apple(screen)
-    apple.spawnApple(APPLE_CENTER)
-
-    # Snake Setup
-    snake = Snake(screen)
-    snake.spawnHead(SNAKE_SPAWN_COR)
-
-    # Snake Controls
-    snake.move(keys)
-
-
-    pygame.display.flip()
 pygame.quit()
