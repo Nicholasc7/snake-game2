@@ -24,41 +24,33 @@ class Bomb:
     # Find random center for Bomb spawn
     def findCenter(self):
         return [random.choice(self.xValues[1:len(self.xValues)-1]) + self.padding//2,random.choice(self.xValues[1:len(self.xValues)-1]) + self.padding//2]
-        return [random.choice(self.xValues) + self.padding/2, random.choice(self.yValues) + self.padding/2]
 
     def spawnCircle(self, bombCenter):
         pygame.draw.circle(self.surface, "red", (bombCenter[0],bombCenter[1]), self.padding/3)
     
+    def drawBombLine(self, screen, bombCenter, lineDir):
+        if lineDir == 0:
+            self.up = pygame.Rect((bombCenter[0] - self.padding//3, bombCenter[1] - self.padding//2), (self.padding//3*2, self.padding//13))
+            pygame.draw.rect(screen, 'blue', self.up)
         
-    
-    def spawnDir(self, screen, bombCenter):
-            direction = random.choice(self.possibleCombinations)
-            for i in range(4):
-                 if i == direction:
-                      return direction
-    
-    def returnArrowCombObjects(self, screen, bombCenter, arrowDir):
-        self.arrowCombinations = []
-        self.up = pygame.Rect((bombCenter[0] - self.padding//3, bombCenter[1] - self.padding//2), (self.padding//3*2, self.padding//13))
-        self.arrowCombinations.append(self.up)
+        if lineDir == 1:
+            self.right = pygame.Rect((bombCenter[0] + self.padding//2 - self.width*2, bombCenter[1] - self.padding//3), (self.padding//13, self.padding//3*2))
+            pygame.draw.rect(screen, 'blue', self.right)
 
-        self.right = pygame.Rect((bombCenter[0] + self.padding//2 - self.width*2, bombCenter[1] - self.padding//3), (self.padding//13, self.padding//3*2))
-        self.arrowCombinations.append(self.right)
-    
-        self.down = pygame.Rect((bombCenter[0] - self.padding//3, bombCenter[1] + self.padding//2 - self.width*2), (self.padding//3*2, self.padding//13))
-        self.arrowCombinations.append(self.down)
+        if lineDir == 2:
+            self.down = pygame.Rect((bombCenter[0] - self.padding//3, bombCenter[1] + self.padding//2 - self.width*2), (self.padding//3*2, self.padding//13))
+            pygame.draw.rect(screen, 'blue', self.down)
 
-        self.left = pygame.Rect((bombCenter[0] - self.padding//2, bombCenter[1] - self.padding//3), (self.padding//13, self.padding//3*2))
-        self.arrowCombinations.append(self.left)
+        if lineDir == 3:
+            self.left = pygame.Rect((bombCenter[0] - self.padding//2, bombCenter[1] - self.padding//3), (self.padding//13, self.padding//3*2))
+            pygame.draw.rect(screen, 'blue', self.left)
 
         return [pygame.Rect((bombCenter[0] - self.padding//3, bombCenter[1] - self.padding//2), (self.padding//3*2, self.padding//13)), pygame.Rect((bombCenter[0] + self.padding//2 - self.width*2, bombCenter[1] - self.padding//3), (self.padding//13, self.padding//3*2)), pygame.Rect((bombCenter[0] - self.padding//3, bombCenter[1] + self.padding//2 - self.width*2), (self.padding//3*2, self.padding//13)), pygame.Rect((bombCenter[0] - self.padding//2, bombCenter[1] - self.padding//3), (self.padding//13, self.padding//3*2))]
         
-    
-    def drawPrevArrows(self, screen, arrowCombs, arrowDir):
-        for i in range(len(arrowCombs)):
-            if i == arrowDir:
-                pygame.draw.rect(screen, 'blue', arrowCombs[i]) 
     def drawUpdatedArrows(self, screen, arrowCombs, arrowDir):
         for i in range(4):
             if i == arrowDir:
                 pygame.draw.rect(screen, 'blue', arrowCombs[i]) 
+    
+    def returnDir(self):
+        return random.choice(self.possibleCombinations)
