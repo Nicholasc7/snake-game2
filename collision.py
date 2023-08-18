@@ -4,7 +4,7 @@ from board import Grid
 from snake import Snake
 
 class Collide:
-    def __init__(self, screen, keylog, arrowDir, bombCenter, snakeCor, posComb):
+    def __init__(self, screen, keylog, LINE_DIR, bombCenter, snakeCor, posComb, circleHitbox):
         s = Snake(screen, bombCenter)
         b = Bomb(screen)
         self.dir = 0
@@ -20,12 +20,14 @@ class Collide:
         self.keylogObject.append(keylog["w"])
         self.keylogObject.append(keylog["d"])
         #print("keylogObejct:", self.keylogObject, "keylogObject[arrowdir]: ", self.keylogObject[arrowDir], "arrowDir:", arrowDir)
-        
-        if self.head.collidepoint(bombCenter) and self.keylogObject[self.dir]:
-            self.collideTest = True
-            self.directionTest = True
-            print("Collide: Valid - Direciton: Valid")
+
+    def checkDir(self, direction):
+        if self.keylogObject[direction["dir"]]:
+            return True
+        else:
+            return False
         if self.head.collidepoint(bombCenter) and self.keylogObject[self.dir] == 0:
             self.collideTest = True
             self.directionTest = False
+        
         
