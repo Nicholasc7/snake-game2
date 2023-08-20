@@ -17,6 +17,12 @@ grid = Grid(screen, "black")
 padding = grid.padding
 collision = 0
 direction = {"dir":0}
+count = 0
+randomBombSpawn = []
+tileSize = screen.get_width() // grid.LINE_COUNT
+for i in range(grid.LINE_COUNT):
+    if i > 0:
+        randomBombSpawn.append(tileSize*i - grid.padding//2)
 
 # Bomb initilize
 b1 = Bomb(screen)
@@ -53,7 +59,7 @@ def gameLoop(keyLog, BOMB_CENTER, LINE_DIR, direction):
     bomb = Bomb(screen)
     bomb.spawnCircle(BOMB_CENTER)
     circleHitbox = bomb.returnCircleHitbox(BOMB_CENTER)
-    pygame.draw.rect(screen, 'darkred', circleHitbox,10,8,8,8)
+    pygame.draw.rect(screen, 'darkred', circleHitbox,12,8,8,8,8)
 
     for i in possibleCombinations.keys():
         if possibleCombinations[0]:
@@ -89,8 +95,10 @@ def gameLoop(keyLog, BOMB_CENTER, LINE_DIR, direction):
     dirTest = col.checkDir(direction)
     #print("dirTest: ", dirTest)
     if pygame.Rect.colliderect(snakeHead, circleHitbox) and dirTest:
-        BOMB_CENTER[1] += 80
-        BOMB_CENTER[0] += 80
+        BOMB_CENTER[1] = random.choice(randomBombSpawn[1:-1])
+        BOMB_CENTER[0] = random.choice(randomBombSpawn[1:-1])
+        print(randomBombSpawn)
+        print(BOMB_CENTER)
 
         # If collision remove value from current direction
         for i in possibleCombinations.keys():
@@ -107,7 +115,6 @@ def gameLoop(keyLog, BOMB_CENTER, LINE_DIR, direction):
         
     if col.collideTest and col.directionTest == 0:
         print("Lost Health!")
-
     pygame.display.flip()
 #----------GAME LOOP----------#
 

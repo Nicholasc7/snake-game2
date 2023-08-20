@@ -3,7 +3,7 @@ import pygame
 
 class Grid:
     def __init__(self, surface, color):
-        self.LINE_COUNT = 12
+        self.LINE_COUNT = 8
         self.surface = surface
         self.color = color
         self.padding = int(surface.get_width() // self.LINE_COUNT)
